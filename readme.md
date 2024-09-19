@@ -50,6 +50,22 @@ Step 2: Run the Test File
 
 - After successful compilation, run the test suite using the following command:
 
-```
+```bash
 java -cp scroogeCoinGrader.jar:rsa.jar:algs4.jar:. TestTxHandler
+```
+
+## Step 3: Expected Output
+
+- If the TxHandler is correctly implemented, the output will show the results of the tests, similar to the following:
+
+```bash
+Running 7 total tests.
+Test 1: test isValidTx() with valid transactions
+==> passed
+...
+Total: 7/7 tests passed!
+
+Running 8 total tests.
+...
+Total: 8/8 tests passed!
 ```
