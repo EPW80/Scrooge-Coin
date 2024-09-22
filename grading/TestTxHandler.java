@@ -15,7 +15,7 @@ import java.io.ObjectInputStream;
 import java.math.BigInteger;
 
 class TestIsValidTx {
-   
+
    public int nPeople;
    public int nUTXOTx;
    public int maxUTXOTxOutput;
@@ -34,9 +34,9 @@ class TestIsValidTx {
 
    public TxHandler txHandler;
 
-   public TestIsValidTx(int nPeople, int nUTXOTx, 
-                           int maxUTXOTxOutput, double maxValue, int nTxPerTest, int maxInput, int maxOutput, double pCorrupt) throws FileNotFoundException, IOException {
-      
+   public TestIsValidTx(int nPeople, int nUTXOTx, int maxUTXOTxOutput, double maxValue, int nTxPerTest, int maxInput,
+         int maxOutput, double pCorrupt) throws FileNotFoundException, IOException {
+
       this.nPeople = nPeople;
       this.nUTXOTx = nUTXOTx;
       this.maxUTXOTxOutput = maxUTXOTxOutput;
@@ -45,18 +45,18 @@ class TestIsValidTx {
       this.maxInput = maxInput;
       this.maxOutput = maxOutput;
       this.pCorrupt = pCorrupt;
-      
+
       byte[] key = new byte[32];
       for (int i = 0; i < 32; i++) {
          key[i] = (byte) 1;
       }
-      
+
       prGen = new PRGen(key);
-      
+
       people = new ArrayList<RSAKeyPair>();
       for (int i = 0; i < nPeople; i++)
          people.add(new RSAKeyPair(prGen, 265));
-      
+
       HashMap<Integer, RSAKeyPair> keyPairAtIndex = new HashMap<Integer, RSAKeyPair>();
       utxoToKeyPair = new HashMap<UTXO, RSAKeyPair>();
 
@@ -182,7 +182,8 @@ class TestIsValidTx {
    }
 
    public int test3() {
-      System.out.println("Test 3: test isValidTx() with transactions containing signatures using incorrect private keys");
+      System.out
+            .println("Test 3: test isValidTx() with transactions containing signatures using incorrect private keys");
 
       boolean passes = true;
 
@@ -191,7 +192,7 @@ class TestIsValidTx {
          boolean uncorrupted = true;
          HashMap<Integer, UTXO> utxoAtIndex = new HashMap<Integer, UTXO>();
          HashSet<UTXO> utxosSeen = new HashSet<UTXO>();
-         int nInput = SampleRandom.randomInt(maxValidInput-1) + 2;
+         int nInput = SampleRandom.randomInt(maxValidInput - 1) + 2;
          double inputValue = 0;
          for (int j = 0; j < nInput; j++) {
             UTXO utxo = utxoSet.get(SampleRandom.randomInt(utxoSet.size()));
@@ -231,9 +232,10 @@ class TestIsValidTx {
 
       return UtilCOS.printPassFail(passes);
    }
-   
+
    public int test4() {
-      System.out.println("Test 4: test isValidTx() with transactions whose total output value exceeds total input value");
+      System.out
+            .println("Test 4: test isValidTx() with transactions whose total output value exceeds total input value");
 
       boolean passes = true;
 
@@ -290,11 +292,11 @@ class TestIsValidTx {
       ArrayList<RSAKeyPair> peopleExtra = new ArrayList<RSAKeyPair>();
       for (int i = 0; i < nPeople; i++)
          peopleExtra.add(new RSAKeyPair(prGen, 265));
-      
+
       HashMap<Integer, RSAKeyPair> keyPairAtIndexExtra = new HashMap<Integer, RSAKeyPair>();
-      
+
       UTXOPool utxoPoolExtra = new UTXOPool();
-      
+
       for (int i = 0; i < nUTXOTx; i++) {
          int num = SampleRandom.randomInt(maxUTXOTxOutput) + 1;
          Transaction tx = new Transaction();
@@ -314,10 +316,10 @@ class TestIsValidTx {
             utxoToKeyPair.put(ut, keyPairAtIndexExtra.get(j));
          }
       }
-      
+
       ArrayList<UTXO> utxoSetExtra = utxoPoolExtra.getAllUTXO();
       int maxValidInputExtra = Math.min(maxInput, utxoSet.size() + utxoSetExtra.size());
-      
+
       for (int i = 0; i < nTxPerTest; i++) {
          Transaction tx = new Transaction();
          boolean uncorrupted = true;
@@ -398,7 +400,7 @@ class TestIsValidTx {
             inputValue += utxoPool.getTxOutput(utxo).value;
             utxoAtIndex.put(j, utxo);
          }
-         
+
          int count = 0;
          for (UTXO utxo : utxosToRepeat) {
             tx.addInput(utxo.getTxHash(), utxo.getIndex());
@@ -406,7 +408,7 @@ class TestIsValidTx {
             utxoAtIndex.put(nInput + count, utxo);
             count++;
          }
-         
+
          int nOutput = SampleRandom.randomInt(maxOutput) + 1;
          double outputValue = 0;
          for (int j = 0; j < nOutput; j++) {
@@ -479,14 +481,13 @@ class TestIsValidTx {
       return UtilCOS.printPassFail(passes);
    }
 
-   public static ArrayList<RSAKeyPairHelper> readKeyPairsFromFile(String filename) 
+   public static ArrayList<RSAKeyPairHelper> readKeyPairsFromFile(String filename)
          throws FileNotFoundException, IOException {
       // Read an RSAKey from a file, return the key that was read
       FileInputStream fis = new FileInputStream(filename);
       ObjectInputStream ois = new ObjectInputStream(fis);
       try {
-         ArrayList<RSAKeyPairHelper> people = 
-               new ArrayList<RSAKeyPairHelper>();
+         ArrayList<RSAKeyPairHelper> people = new ArrayList<RSAKeyPairHelper>();
          int n = ois.readInt();
          for (int i = 0; i < n; i++) {
             BigInteger[] pub = (BigInteger[]) ois.readObject();
@@ -499,20 +500,20 @@ class TestIsValidTx {
          ois.close();
          fis.close();
          return people;
-      } catch(ClassNotFoundException x) {
+      } catch (ClassNotFoundException x) {
          ois.close();
          fis.close();
          return null;
       }
    }
-   
+
    public static void run(String[] args) throws FileNotFoundException, IOException {
       TestIsValidTx tester = new TestIsValidTx(20, 20, 20, 20, 50, 20, 20, 0.5);
-      
+
       int total = 0;
       int numTests = 7;
 
-      UtilCOS.printTotalNumTests(numTests);  
+      UtilCOS.printTotalNumTests(numTests);
       total += tester.test1();
       total += tester.test2();
       total += tester.test3();
@@ -523,7 +524,7 @@ class TestIsValidTx {
 
       System.out.println();
       UtilCOS.printNumTestsPassed(total, numTests);
-   }  
+   }
 }
 
 public class TestTxHandler {
@@ -542,7 +543,7 @@ public class TestTxHandler {
 
       return passed1;
    }
-   
+
    private static boolean verify(Transaction[] allTxs1, Transaction[] allTxs2, UTXOPool uPool) {
       Transaction[] copyTxs1 = new Transaction[allTxs1.length];
       for (int i = 0; i < copyTxs1.length; i++)
@@ -570,9 +571,8 @@ public class TestTxHandler {
 
       return passed1 && passed2;
    }
-   
-   private static boolean verify(Transaction[] allTxs1, Transaction[] allTxs2, 
-         Transaction[] allTxs3, UTXOPool uPool) {
+
+   private static boolean verify(Transaction[] allTxs1, Transaction[] allTxs2, Transaction[] allTxs3, UTXOPool uPool) {
       Transaction[] copyTxs1 = new Transaction[allTxs1.length];
       for (int i = 0; i < copyTxs1.length; i++)
          copyTxs1[i] = allTxs1[i];
@@ -612,8 +612,8 @@ public class TestTxHandler {
       return passed1 && passed2 && passed3;
    }
 
-   private static boolean verifyPoolUpdate(Transaction[] allTxs1, Transaction[] allTxs2, 
-         Transaction[] allTxs3, UTXOPool uPool) {
+   private static boolean verifyPoolUpdate(Transaction[] allTxs1, Transaction[] allTxs2, Transaction[] allTxs3,
+         UTXOPool uPool) {
       Transaction[] copyTxs1 = new Transaction[allTxs1.length];
       for (int i = 0; i < copyTxs1.length; i++)
          copyTxs1[i] = allTxs1[i];
@@ -696,8 +696,8 @@ public class TestTxHandler {
 
    // all transactions are simple and valid
    public static int test4(UTXOPool uPool) throws FileNotFoundException, IOException {
-      System.out.println("Test 4: test handleTransactions() with simple and "
-            + "valid transactions with some double spends");
+      System.out.println(
+            "Test 4: test handleTransactions() with simple and " + "valid transactions with some double spends");
 
       String common = "files/SampleTxsTest4-";
       String file1 = common + "1.txt";
@@ -774,7 +774,7 @@ public class TestTxHandler {
    }
 
    public static void main(String[] args) throws FileNotFoundException, IOException {
-	  TestIsValidTx.run(args);
+      TestIsValidTx.run(args);
       String skpFile = "files/SampleKeyPairs.txt";
       String supFile = "files/SampleUTXOPool.txt";
       SampleKeyPairs skp = SampleKeyPairsFileHandler.readKeyPairsFromFile(skpFile);
@@ -784,7 +784,7 @@ public class TestTxHandler {
       int total = 0;
       int numTests = 8;
 
-      UtilCOS.printTotalNumTests(numTests);  
+      UtilCOS.printTotalNumTests(numTests);
       total += test1(uPool);
       total += test2(uPool);
       total += test3(uPool);

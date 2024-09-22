@@ -17,7 +17,7 @@ public class TestMaxFeeTxHandler {
 
       return passed1;
    }
-   
+
    private static boolean verify(Transaction[] allTxs1, Transaction[] allTxs2, UTXOPool uPool) {
       Transaction[] copyTxs1 = new Transaction[allTxs1.length];
       for (int i = 0; i < copyTxs1.length; i++)
@@ -45,9 +45,8 @@ public class TestMaxFeeTxHandler {
 
       return passed1 && passed2;
    }
-   
-   private static boolean verify(Transaction[] allTxs1, Transaction[] allTxs2, 
-         Transaction[] allTxs3, UTXOPool uPool) {
+
+   private static boolean verify(Transaction[] allTxs1, Transaction[] allTxs2, Transaction[] allTxs3, UTXOPool uPool) {
       Transaction[] copyTxs1 = new Transaction[allTxs1.length];
       for (int i = 0; i < copyTxs1.length; i++)
          copyTxs1[i] = allTxs1[i];
@@ -87,8 +86,8 @@ public class TestMaxFeeTxHandler {
       return passed1 && passed2 && passed3;
    }
 
-   private static boolean verifyPoolUpdate(Transaction[] allTxs1, Transaction[] allTxs2, 
-         Transaction[] allTxs3, UTXOPool uPool) {
+   private static boolean verifyPoolUpdate(Transaction[] allTxs1, Transaction[] allTxs2, Transaction[] allTxs3,
+         UTXOPool uPool) {
       Transaction[] copyTxs1 = new Transaction[allTxs1.length];
       for (int i = 0; i < copyTxs1.length; i++)
          copyTxs1[i] = allTxs1[i];
@@ -147,7 +146,7 @@ public class TestMaxFeeTxHandler {
       int total = 0;
       int numTests = 1;
 
-      UtilCOS.printTotalNumTests(numTests);  
+      UtilCOS.printTotalNumTests(numTests);
       total += test1(uPool);
 
       System.out.println();
